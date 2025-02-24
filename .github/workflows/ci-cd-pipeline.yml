@@ -1,0 +1,38 @@
+name: CI/CD Pipeline  # Name of the workflow
+
+on:
+  push:
+    branches:
+      - main  # Runs on every push to main branch
+  pull_request:
+    branches:
+      - main  # Runs on every pull request to main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Defines the runner environment
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Pulls the latest code from the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Define Node.js version
+
+      - name: Install Dependencies
+        run: npm install  # Installs project dependencies
+
+      - name: Run Tests
+        run: npm test  # Runs tests (modify based on your project)
+
+  deploy:
+    needs: build  # Runs only after the build job completes successfully
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Server
+        run: |
+          echo "Deploying the application..."
+          # Add deployment commands here (e.g., SSH to the server and pull latest code)
